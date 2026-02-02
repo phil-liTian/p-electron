@@ -33,8 +33,8 @@ let notificationWindow: BrowserWindow | null
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 200,
-    height: 200,
+    width: 1000,
+    height: 800,
     frame: false,
     transparent: true,
     backgroundColor: '#00000000',
@@ -58,7 +58,7 @@ function createWindow() {
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())
   })
-
+  win.setAlwaysOnTop(true, 'screen-saver', 2)
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)
   } else {

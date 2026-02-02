@@ -6,6 +6,7 @@
 import { ref } from 'vue'
 import avatarImage from './assets/avatar.png'
 import { quotes } from './data/quotes'
+import ChatBox from './components/ChatBox.vue'
 
 const isRotating = ref(false)
 const isJumping = ref(false)
@@ -45,18 +46,20 @@ const showRandomQuote = () => {
 
 <template>
   <div class="mascot-container">
-    <img
-      ref="mascotRef"
-      :src="avatarImage"
-      class="mascot"
-      :class="{ 'rotating': isRotating, 'jumping': isJumping }"
-      @mousedown="handleMouseDown"
-      @contextmenu.prevent
-      @dragstart.prevent
-      draggable="false"
-      alt="avatar"
-    />
-    <div></div>
+    <div class="mascot-wrapper">
+      <img
+        ref="mascotRef"
+        :src="avatarImage"
+        class="mascot"
+        :class="{ 'rotating': isRotating, 'jumping': isJumping }"
+        @mousedown="handleMouseDown"
+        @contextmenu.prevent
+        @dragstart.prevent
+        draggable="false"
+        alt="avatar"
+      />
+      <ChatBox />
+    </div>
   </div>
 </template>
 
@@ -71,6 +74,11 @@ const showRandomQuote = () => {
   user-select: none;
   background: transparent;
   -webkit-app-region: drag;
+}
+
+.mascot-wrapper {
+  position: relative;
+  display: inline-block;
 }
 
 .mascot {
