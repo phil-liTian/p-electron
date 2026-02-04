@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref } from 'vue'
 
 const messages = ref<Array<{ text: string; isUser: boolean }>>([
   { text: '你好! 有什么可以帮助你的吗? 你可以问我如下问题：\n\n- 你是谁？\n- 你2025年做了什么？\n- 2026年有什么目标？\n\n我会尽力回答你的问题。', isUser: false }
