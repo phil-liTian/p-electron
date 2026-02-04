@@ -24,4 +24,12 @@ declare namespace NodeJS {
 // Used in Renderer process, expose in `preload.ts`
 interface Window {
   ipcRenderer: import('electron').IpcRenderer
+  screenInfo: {
+    getScreenSize: () => Promise<{ width: number; height: number }>
+  }
+  showChatWindow: {
+    open: () => void
+    close: () => void
+  }
 }
+

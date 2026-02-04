@@ -22,3 +22,21 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   // You can expose other APTs you need here.
   // ...
 })
+
+contextBridge.exposeInMainWorld('screenInfo', {
+  getScreenSize: () => ipcRenderer.invoke('get-screen-size')
+})
+
+contextBridge.exposeInMainWorld('showChatWindow', {
+  open: () => ipcRenderer.send('show-chat-window'),
+  close: () => ipcRenderer.send('close-chat-window')
+})
+
+contextBridge.exposeInMainWorld('screenInfo', {
+  getScreenSize: () => ipcRenderer.invoke('get-screen-size')
+})
+
+contextBridge.exposeInMainWorld('showChatWindow', {
+  open: () => ipcRenderer.send('show-chat-window'),
+  close: () => ipcRenderer.send('close-chat-window')
+})

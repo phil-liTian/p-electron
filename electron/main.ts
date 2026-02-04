@@ -30,11 +30,12 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 
 
 let win: BrowserWindow | null
 let notificationWindow: BrowserWindow | null
+let chatWindow: BrowserWindow | null
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 1000,
-    height: 800,
+    width: 150,
+    height: 150,
     frame: false,
     transparent: true,
     backgroundColor: '#00000000',
@@ -114,8 +115,69 @@ function createNotificationWindow(message: string) {
   }, 3000)
 }
 
+function createChatWindow() {
+  if (chatWindow) {
+    chatWindow.focus()
+    return
+  }
+
+  const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize
+
+  chatWindow = new BrowserWindow({
+    width: 500,
+    height: 400,
+    x: Math.floor((screenWidth - 500) / 2),
+    y: Math.floor((screenHeight - 400) / 2),
+    frame: false,
+    transparent: true,
+    backgroundColor: '#00000000',
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    resizable: false,
+    show: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.mjs'),
+    },
+  })
+
+  chatWindow.once('ready-to-show', () => {
+    chatWindow?.show()
+  })
+
+  chatWindow.on('closed', () => {
+    chatWindow = null
+  })
+
+  if (VITE_DEV_SERVER_URL) {
+    chatWindow.loadURL(`${VITE_DEV_SERVER_URL}#/chat`)
+  } else {
+    chatWindow.loadFile(path.join(RENDERER_DIST, 'index.html'), {
+      hash: '#/chat'
+    })
+  }
+}
+
+function closeChatWindow() {
+  if (chatWindow && !chatWindow.isDestroyed()) {
+    chatWindow.close()
+  }
+}
+
 ipcMain.on('show-notification', (_event, message: string) => {
   createNotificationWindow(message)
+})
+
+ipcMain.on('show-chat-window', () => {
+  createChatWindow()
+})
+
+ipcMain.on('close-chat-window', () => {
+  closeChatWindow()
+})
+
+ipcMain.handle('get-screen-size', () => {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+  return { width, height }
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
